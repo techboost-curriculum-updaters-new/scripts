@@ -2,24 +2,44 @@
 
 cd ~
 
+## キャッシュメモリ開放とswap領域の拡張
+
+echo "キャッシュメモリ開放とswap領域の拡張"
+### キャッシュメモリを解放
+sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+
+## swap領域の拡張
+sudo dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+sudo chmod 600 /var/swap.1
+sudo mkswap /var/swap.1
+sudo swapon /var/swap.1
+sudo cp -p /etc/fstab /etc/fstab.ORG
+sudo sh -c "echo '/var/swap.1 swap swap defaults 0 0' >> /etc/fstab"
+
 sudo yum update -y
 
-
-# uninstall MariaDB, install MySQL 5.7
+# MariaDBの削除
 sudo service mariadb stop
 sudo yum -y erase mariadb-config mariadb-common mariadb-libs mariadb
-sudo yum -y localinstall https://repo.mysql.com/mysql80-community-release-el7-1.noarch.rpm
-sudo yum-config-manager --disable mysql80-community
-sudo yum-config-manager --enable mysql57-community
+
+# ローカルでリポジトリを追加
+sudo yum -y localinstall https://repo.mysql.com/mysql80-community-release-el7-11.noarch.rpm
+
+# MySQL8.0をインストール
 sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 sudo yum -y install mysql-community-server mysql-community-devel
+
+# MySQLサーバの起動
 sudo systemctl start mysqld.service
 sudo systemctl enable mysqld.service
 
-DB_PASSWORD=$(sudo grep "A temporary password is generated" /var/log/mysqld.log | sed -s 's/.*root@localhost: //')
-mysql -uroot -p${DB_PASSWORD} --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'TB@shibuya1';uninstall plugin validate_password;set password for root@localhost=password('');"
+# rootの初期パスワードを確認
 
-# install PostgreSQL11 (for heroku deploy)
+# 初期パスワードでMySQLにログインし、パスワードを空文字に変更
+DB_PASSWORD=$(sudo grep "A temporary password is generated" /var/log/mysqld.log | sed -s 's/.*root@localhost: //')
+mysql -u root -p${DB_PASSWORD} --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'TB@shibuya1';SET PERSIST validate_password.policy = LOW;SET PERSIST validate_password.mixed_case_count = 0;SET PERSIST validate_password.number_count = 0;SET PERSIST validate_password.special_char_count = 0;SET PERSIST validate_password.length = 0;ALTER USER 'root'@'localhost' IDENTIFIED BY '';";
+
+# install PostgreSQL11
 sudo amazon-linux-extras install -y postgresql11
 sudo yum -y install postgresql-devel
 
@@ -50,12 +70,6 @@ rbenv global 2.7.3
 
 # install rails
 printf "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri\n" >> ~/.gemrc
+sudo yum remove rubygem-nokogiri
+gem install nokogiri -v 1.15.5
 gem install rails -v 5.2.0
-
-
-# install heroku
-curl -OL https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
-tar zxf heroku-linux-x64.tar.gz && rm -f heroku-linux-x64.tar.gz
-sudo mv heroku /usr/local
-echo 'export PATH=/usr/local/heroku/bin:$PATH' >> $HOME/.bash_profile
-source $HOME/.bash_profile
