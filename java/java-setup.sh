@@ -1,14 +1,9 @@
 #!/bin/bash
 
 # java-21 install
-sudo wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
-sudo tar zxvf jdk-21_linux-x64_bin.tar.gz
-sudo mv jdk-21.0.1 /usr/bin/jdk-21.0.1
-sudo rm -rf jdk-21_linux-x64_bin.tar.gz
-echo 'export JAVA_HOME=/usr/bin/jdk-21.0.1' >> /home/ec2-user/.bashrc
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /home/ec2-user/.bashrc
-echo 'export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar' >> /home/ec2-user/.bashrc
-source /home/ec2-user/.bashrc
+sudo yum -y remove "java*"
+sudo yum -y localinstall https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm
+echo 'export JAVA_HOME=/usr/lib/jvm/jdk-21-oracle-x64' >> /home/ec2-user/.bashrc
 
 # tomcat9 install
 sudo amazon-linux-extras install tomcat9 -y
@@ -31,7 +26,7 @@ EnvironmentFile=/etc/tomcat/tomcat.conf
 Environment=\"NAME=\"
 EnvironmentFile=-/etc/sysconfig/tomcat
 EnvironmentFile=-/usr/share/tomcat/bin/setenv.sh
-ExecStart=/usr/bin/jdk-21.0.1/bin/java -jar /usr/share/tomcat/webapps/app.jar
+ExecStart=/usr/bin/java -jar /usr/share/tomcat/webapps/app.jar
 SuccessExitStatus=143
 User=tomcat
 
@@ -39,9 +34,19 @@ User=tomcat
 WantedBy=multi-user.target
 EOF"
 
+# The configuration to not delete uploaded tmp images in Tomcat
+NOT_DELETE_TMP_IMG_CONF_FILE=/etc/tmpfiles.d/not_delete_tmp_img.conf
+sudo sh -c "cat > $NOT_DELETE_TMP_IMG_CONF_FILE <<EOF
+# DO NOT DELETE tmp/tomcat-docbase.8080.*/
+x /tmp/tomcat-docbase.8080.*/*
+EOF"
+
+sudo systemd-tmpfiles --create
+
 # create setenv.sh
 sudo touch /usr/share/tomcat/bin/setenv.sh
 sudo chmod 666 /usr/share/tomcat/bin/setenv.sh
+
 # enable tomcat
 sudo systemctl enable tomcat
 
@@ -57,6 +62,7 @@ sudo postgresql-setup initdb
 
 # change postgres user password
 sudo  sh -c "echo 'postgres:postgres' | chpasswd"
+
 # modify /var/lib/pgsql/data/postgresql.conf
 PSQL_CONF=/var/lib/pgsql/data/postgresql.conf
 sudo cp ${PSQL_CONF} ${PSQL_CONF}.`date +%Y%m%d%H%M%S`
@@ -179,7 +185,6 @@ i
 wq
 EOF
 
-
 sudo chown tomcat:tomcat ${SV_CONF}
 
 # start nginx
@@ -247,5 +252,3 @@ fi
 if [ $COMPLETED -eq  1 ]; then
   echo "java-setup.sh successfully completed."
 fi
-
-exec bash
