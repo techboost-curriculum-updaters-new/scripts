@@ -1,12 +1,12 @@
 #!/bin/bash
 
-## root へ移動
+# root へ移動
 cd ~
 
-## キャッシュメモリ を解放
+# キャッシュメモリ を解放
 sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
 
-## swap領域 を拡張
+# swap領域 を拡張
 sudo dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
 sudo chmod 600 /var/swap.1
 sudo mkswap /var/swap.1
@@ -14,7 +14,7 @@ sudo swapon /var/swap.1
 sudo cp -p /etc/fstab /etc/fstab.ORG
 sudo sh -c "echo '/var/swap.1 swap swap defaults 0 0' >> /etc/fstab"
 
-## yum を更新
+# yum を更新
 sudo yum update -y
 
 # MariaDB を削除
