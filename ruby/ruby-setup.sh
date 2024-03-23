@@ -64,3 +64,6 @@ rbenv global 2.7.3
 printf "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri\n" >> ~/.gemrc
 gem install nokogiri -v 1.15.5
 gem install rails -v 5.2.0
+
+# .bash_profile を再読み込み
+source $HOME/.bash_profile
