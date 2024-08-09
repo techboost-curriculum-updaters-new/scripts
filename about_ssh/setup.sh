@@ -76,7 +76,7 @@ sudo mv composer.phar /usr/bin/composer
 
 # mysql2 gem のインストール
 sudo yum install mysql-devel
-gem install mysql2 -v '0.5.5' -- --with-mysql-config=/usr/bin/mysql_config
+gem install mysql2 -v '0.5.5' --source 'https://rubygems.org/'
 
 # シェルの設定を再読み込み
 source ~/.bashrc
