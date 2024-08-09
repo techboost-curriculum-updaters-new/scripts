@@ -242,7 +242,7 @@ VSCode 上部の検索ボックスに `Preferences: Open Settings (JSON)` を入
 1 行目の `{` の下に以下の 1 行を追記し上書き保存します。
 
 ```json:settings.json
-    "remote.SSH.configFile": "~/.ssh/config"
+    "remote.SSH.configFile": "~/.ssh/config",
 ```
 
 **-- 場合分けここまで --**
