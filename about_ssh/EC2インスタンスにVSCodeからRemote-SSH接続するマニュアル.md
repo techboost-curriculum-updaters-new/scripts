@@ -138,7 +138,7 @@ SSH クライアントタブを開きます。
 
 **-- 以下場合分け開始 --**
 
-### **WIndows の場合**
+### **Windows の場合**
 
 管理者権限で `PowerShell` を開きます。
 [![Image from Gyazo](https://i.gyazo.com/a8dd19ce16d3181374e4baf28c2e9e77.png)](https://gyazo.com/a8dd19ce16d3181374e4baf28c2e9e77)
