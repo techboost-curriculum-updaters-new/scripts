@@ -351,7 +351,7 @@ VSCode が再起動しますので、Window の場合は `Linux` を選択しま
 続いて、新しく開いた VSCode のターミナルで以下のコマンドで次のスクリプトを実行します。
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/techboost-curriculum-updaters-new/scripts/master/about_ssh/setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/techboost-curriculum-updaters-new/scripts/master/about_ssh/setup.sh | sh; exec $SHELL -l
 ```
 
 ### Java コースの AWS デプロイ
