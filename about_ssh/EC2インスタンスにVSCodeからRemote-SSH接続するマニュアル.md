@@ -356,13 +356,35 @@ VSCode が再起動しますので、Window の場合は `Linux` を選択しま
 
 ここまでで、**VSCode から EC2 インスタンスに SSH 接続することに成功しました**。
 
+最後に、Remote-SSHで EC2インスタンスの接続した場合に、毎回同じ画面が表示されるように設定します。
+
+新しく起動したVSCodeの左下の以下の **⚙** アイコンをクリックし、**コマンドパレット** を選択してください。
+[![Image from Gyazo](https://i.gyazo.com/7f683e2c4c0c310b43a70295aa0b5d0a.png)](https://gyazo.com/7f683e2c4c0c310b43a70295aa0b5d0a)
+
+上部の検索ボックスに **Open Container Configuration File** と入力し、選択肢に出てくる **開発コンテナー: コンテナ―構成ファイルを開く** メニューをクリックしてください。
+[![Image from Gyazo](https://i.gyazo.com/d357e423a050c80ef54f88bba0fa11c9.png)](https://gyazo.com/d357e423a050c80ef54f88bba0fa11c9)
+
+以下のように **dmm_webcamp-web.json** という名前のファイルが開きます。
+2行目から4行目の記述は、お使いのPC環境によって違う場合があります。
+[![Image from Gyazo](https://i.gyazo.com/5e18450e1707619d1472d96623111eea.png)](https://gyazo.com/5e18450e1707619d1472d96623111eea)
+
+**dmm_webcamp-web.json** ファイルの 最終行の `}` 行の1行上に以下の2行のコードを追記します。
+```js:dmm_webcamp-web.json
+	"remoteUser": "ec2-user",
+	"workspaceFolder": "/home/ec2-user/environment"
+```
+
+以下が最終形の **dmm_webcamp-web.json** ファイルの様子です。上書き保存をしておきましょう。
+[![Image from Gyazo](https://i.gyazo.com/2fb6c794b8fb3268c2190d1765b9cacf.png)](https://gyazo.com/2fb6c794b8fb3268c2190d1765b9cacf)
+
+
 ## 環境の設定と、各種アプリのインストール
 
 ### PHP コース、Ruby コースの場合
 
 続いて、新しく開いた VSCode のターミナルで以下のコマンドで次のスクリプトを実行します。
 
-```sh
+```bash:ターミナルでの実行コマンド
 curl -sSL https://raw.githubusercontent.com/techboost-curriculum-updaters-new/scripts/master/about_ssh/setup.sh | sh; exec $SHELL -l
 ```
 
