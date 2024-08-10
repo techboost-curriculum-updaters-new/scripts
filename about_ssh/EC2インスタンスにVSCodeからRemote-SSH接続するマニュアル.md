@@ -23,6 +23,18 @@
 msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
 ```
 
+最後に、AWS CLIが正常にインストールされているか確認します。
+
+コマンドプロンプトを再起動して、以下のコマンドを実行します。
+```bash:コマンドプロンプトでの実行コマンド
+aws --version
+```
+
+以下のように表示されればインストールが成功しています。`...`の箇所は環境により異なります。
+```bash:コマンドプロンプトでの実行結果
+aws-cli/2.... Python/3... Windows/...
+```
+
 ### Mac の場合
 
 ターミナルを開き、以下のコマンドを実行します。パスワードを聞いてきますので、Mac にログインする際のパスワードを入力してエンターキーを押します。
@@ -30,6 +42,18 @@ msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
 ```bash:ターミナルでの実行コマンド
 curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
 sudo installer -pkg AWSCLIV2.pkg -target /
+```
+
+最後に、AWS CLIが正常にインストールされているか確認します。
+
+ターミナルを再起動して、以下のコマンドを実行します。
+```bash:ターミナルでの実行コマンド
+aws --version
+```
+
+以下のように表示されればインストールが成功しています。`...`の箇所は環境により異なります。
+```bash:ターミナルでの実行結果
+aws-cli/2... Python/3... .../... exe/...
 ```
 
 ## AWS EC2 インスタンスの作成
