@@ -75,7 +75,7 @@ curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/bin/composer
 
 # mysql2 gem のインストール
-sudo yum install mysql-devel
+sudo yum install -y mysql-devel
 gem install mysql2 -v '0.5.5' --source 'https://rubygems.org/'
 
 # シェルの設定を再読み込み
