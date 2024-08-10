@@ -78,6 +78,19 @@ sudo mv composer.phar /usr/bin/composer
 sudo yum install -y mysql-devel
 gem install mysql2 -v '0.5.5' --source 'https://rubygems.org/'
 
+# ターミナルのプロンプト表示設定
+echo '#!/bin/sh' > /home/ec2-user/prompt.sh
+echo 'parse_git_branch() {' >> /home/ec2-user/prompt.sh
+echo '    git branch 2> /dev/null | sed -e '\''/^[^*]/d'\'' -e '\''s/* \(.*\)/ (\1)/'\''' >> /home/ec2-user/prompt.sh
+echo '}' >> /home/ec2-user/prompt.sh
+echo 'export PS1="\[\033[01;32m\]\u\[\033[00m\]:\[\033[34m\]\w\[\033[00m\]\$(parse_git_branch) $ "' >> /home/ec2-user/prompt.sh
+
+sudo chmod 755 /home/ec2-user/prompt.sh
+echo 'source ~/prompt.sh' >> /home/ec2-user/.bashrc
+echo 'source ~/prompt.sh' >> /home/ec2-user/.bash_profile
+
 # シェルの設定を再読み込み
 source ~/.bashrc
 source ~/.bash_profile
+
+echo "環境構築が完了しました。"
