@@ -122,6 +122,18 @@ SSH クライアントタブを開きます。
 
 ここまでで EC2 インスタンスの作成が終わりました。
 
+最後に EC2インスタンスが停止することを防ぐために、停止保護設定をします。
+以下の画面で、`インスタンス` のリンクをクリックします。
+[![Image from Gyazo](https://i.gyazo.com/9d102e8a480e3dabc7af199fc4069154.png)](https://gyazo.com/9d102e8a480e3dabc7af199fc4069154)
+
+次に 以下の手順で `停止保護` を選択します。
+[![Image from Gyazo](https://i.gyazo.com/16b1fc58231436348d0821d44692fb32.png)](https://gyazo.com/16b1fc58231436348d0821d44692fb32)
+
+有効化にチェックを入れ、`保存` をクリックします。
+[![Image from Gyazo](https://i.gyazo.com/25aab099bd010e5701bd7290932208d9.png)](https://gyazo.com/25aab099bd010e5701bd7290932208d9)
+
+以上で、EC2インスタンスの作成と停止保護の設定が完了しました。
+
 ## PC から EC2 インスタンスに SSH 接続する
 
 **-- 以下場合分け開始 --**
