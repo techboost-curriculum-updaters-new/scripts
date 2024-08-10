@@ -2,10 +2,12 @@
 
 今回の学習に当たり、**AWS EC2** という仮想サーバを使って、ご自身の PC の中に学習環境を構築しましょう。
 
-以下を前提とします。
+**以下の作業が終わっていることを前提とします。**
 
 - AWS アカウントを作成していること
+  - [AWS アカウント作成の流れ](https://aws.amazon.com/jp/register-flow/)
 - PC に VSCode をインストールし、日本語パックをインストールしていること
+  - [VSCode(Visual Studio Code)のインストールと日本語化する方法](https://nt-a.net/ringobit-vscode-install-japanese)
 
 ## AWS CLI のインストール
 
