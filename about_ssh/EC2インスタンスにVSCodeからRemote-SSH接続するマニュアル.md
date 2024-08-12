@@ -358,28 +358,16 @@ VSCode が再起動しますので、Window の場合は `Linux` を選択しま
 
 ここまでで、**VSCode から EC2 インスタンスに SSH 接続することに成功しました**。
 
-最後に、Remote-SSHで EC2インスタンスの接続した場合に、毎回同じ画面が表示されるように設定します。
+上記ファイルメニューから `リモート接続を閉じる` をクリックして、一旦 Remote-SSH接続をした VSCodeを閉じます。
+[![Image from Gyazo](https://i.gyazo.com/456829466f9813e30fffedc1b6429822.png)](https://gyazo.com/456829466f9813e30fffedc1b6429822)
 
-新しく起動したVSCodeの左下の以下の **⚙** アイコンをクリックし、**コマンドパレット** を選択してください。
-[![Image from Gyazo](https://i.gyazo.com/7f683e2c4c0c310b43a70295aa0b5d0a.png)](https://gyazo.com/7f683e2c4c0c310b43a70295aa0b5d0a)
+以下の `リモート エキスプローラ` のアイコンをクリックします。
+[![Image from Gyazo](https://i.gyazo.com/80edd1af3fc88e34d6ae7a4145516c5a.png)](https://gyazo.com/80edd1af3fc88e34d6ae7a4145516c5a)
 
-上部の検索ボックスに **Open Container Configuration File** と入力し、選択肢に出てくる **開発コンテナー: コンテナ―構成ファイルを開く** メニューをクリックしてください。
-[![Image from Gyazo](https://i.gyazo.com/d357e423a050c80ef54f88bba0fa11c9.png)](https://gyazo.com/d357e423a050c80ef54f88bba0fa11c9)
+以下の `environment` 横の `->` アイコン をクリックすると、EC2インスタンスに Remote-SSH接続をし直し、enviromentフォルダが開かれた状態で起動します。
+[![Image from Gyazo](https://i.gyazo.com/8d33a44afd9b3d1db637ec2b63ce94fc.png)](https://gyazo.com/8d33a44afd9b3d1db637ec2b63ce94fc)
 
-以下のように **dmm_webcamp-web.json** という名前のファイルが開きます。
-2行目から4行目の記述は、お使いのPC環境によって違う場合があります。
-[![Image from Gyazo](https://i.gyazo.com/5e18450e1707619d1472d96623111eea.png)](https://gyazo.com/5e18450e1707619d1472d96623111eea)
-
-**dmm_webcamp-web.json** ファイルの 最終行の `}` 行の1行上に以下の2行のコードを追記します。
-```js:dmm_webcamp-web.json
-	"remoteUser": "ec2-user",
-	"workspaceFolder": "/home/ec2-user/environment"
-```
-
-以下が最終形の **dmm_webcamp-web.json** ファイルの様子です。上書き保存をしておきましょう。
-[![Image from Gyazo](https://i.gyazo.com/2fb6c794b8fb3268c2190d1765b9cacf.png)](https://gyazo.com/2fb6c794b8fb3268c2190d1765b9cacf)
-
-
+今後、EC2インスタンス に Remote-SSH 接続する際には、このような操作を行ってください。
 ## 環境の設定と、各種アプリのインストール
 
 ### PHP コース、Ruby コースの場合
