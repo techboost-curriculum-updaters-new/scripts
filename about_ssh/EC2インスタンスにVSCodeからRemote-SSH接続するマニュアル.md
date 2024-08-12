@@ -8,6 +8,8 @@
   - [AWS アカウント作成の流れ](https://aws.amazon.com/jp/register-flow/)
 - PC に VSCode をインストールし、日本語パックをインストールしていること
   - [VSCode(Visual Studio Code)のインストールと日本語化する方法](https://nt-a.net/ringobit-vscode-install-japanese)
+  - テキストでは例えば、以下に説明があります。
+    - [ブースト (フロントエンド)コース > ベーシックターム (フロントエンド初級編) > 2.HTMLを学ぶ目的とHTMLでできること > 4.テキストエディタの準備](https://be.tech-boost.jp/common/books/306#4.%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%A8%E3%83%87%E3%82%A3%E3%82%BF%E3%81%AE%E6%BA%96%E5%82%99)
 
 ## AWS CLI のインストール
 
