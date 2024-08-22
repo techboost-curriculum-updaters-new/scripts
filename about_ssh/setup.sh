@@ -51,6 +51,10 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 rbenv install 2.7.3
 rbenv global 2.7.3
 
+# RubyGems の更新
+gem install rubygems-update -v 3.3.22
+update_rubygems
+
 # Rails 5.2.0 のインストール
 gem install nokogiri -v 1.15.6
 gem install rails -v 5.2.0
