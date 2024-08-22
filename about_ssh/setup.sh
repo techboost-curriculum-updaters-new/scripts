@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# スクリプト開始時刻を記録
+START_TIME=$SECONDS
+
 # キャッシュメモリ を解放
 sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
 
@@ -98,3 +101,8 @@ source ~/.bashrc
 source ~/.bash_profile
 
 echo "環境構築が完了しました。"
+
+# 経過時間を計算
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+
+echo "実行時間: ${ELAPSED_TIME}秒"
