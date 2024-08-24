@@ -58,14 +58,28 @@ sudo chown tomcat:tomcat ~/environment/setenv.sh
 # postgres13 install
 sudo amazon-linux-extras install postgresql13 -y
 sudo yum install postgresql-server postgresql-devel -y
+
+# PostgreSQL データディレクトリの確認と初期化
+if [ -d /var/lib/pgsql/data/ ]; then
+    echo "PostgreSQL data directory exists. Removing existing data."
+    sudo rm -rf /var/lib/pgsql/data/*  # 既存のデータを削除
+else
+    echo "PostgreSQL data directory does not exist. Creating it."
+    sudo mkdir -p /var/lib/pgsql/data
+fi
+
+# PostgreSQL データディレクトリの所有者を変更
+sudo chown postgres:postgres /var/lib/pgsql/data
+
+# PostgreSQL 初期化
 sudo postgresql-setup initdb
 
 # change postgres user password
-sudo  sh -c "echo 'postgres:postgres' | chpasswd"
+sudo sh -c "echo 'postgres:postgres' | chpasswd"
 
 # modify /var/lib/pgsql/data/postgresql.conf
 PSQL_CONF=/var/lib/pgsql/data/postgresql.conf
-sudo cp ${PSQL_CONF} ${PSQL_CONF}.`date +%Y%m%d%H%M%S`
+sudo cp ${PSQL_CONF} ${PSQL_CONF}.$(date +%Y%m%d%H%M%S)
 sudo ed - ${PSQL_CONF} <<EOF
 ,s/^timezone.*$/timezone = 'Asia\/Tokyo'/g
 ,s/^lc_messages.*$/lc_messages = 'C'/g
@@ -77,7 +91,7 @@ EOF
 
 # modify /var/lib/pgsql/data/pg_hba.conf
 PG_CONF=/var/lib/pgsql/data/pg_hba.conf
-sudo cp ${PG_CONF} ${PG_CONF}.`date +%Y%m%d%H%M%S`
+sudo cp ${PG_CONF} ${PG_CONF}.$(date +%Y%m%d%H%M%S)
 sudo ed - ${PG_CONF} <<EOF
 /peer$/ s/peer/trust/
 /ident$/ s/ident/trust/
@@ -103,7 +117,7 @@ if [ ! -f ${NGINX_CONF}.org ]; then
   sudo cp ${NGINX_CONF} ${NGINX_CONF}.org
 fi
 
-sudo cp ${NGINX_CONF} ${NGINX_CONF}.`date +%Y%m%d%H%M%S`
+sudo cp ${NGINX_CONF} ${NGINX_CONF}.$(date +%Y%m%d%H%M%S)
 
 if [ -f ${NGINX_CONF}.org ]; then
   sudo cp ${NGINX_CONF}.org ${NGINX_CONF}
@@ -171,7 +185,7 @@ if [ ! -f ${SV_CONF}.org ]; then
   sudo cp ${SV_CONF} ${SV_CONF}.org
 fi
 
-sudo cp ${SV_CONF} ${SV_CONF}.`date +%Y%m%d%H%M%S`
+sudo cp ${SV_CONF} ${SV_CONF}.$(date +%Y%m%d%H%M%S)
 
 if [ -f ${SV_CONF}.org ]; then
   sudo cp ${SV_CONF}.org ${SV_CONF}
@@ -191,18 +205,20 @@ sudo chown tomcat:tomcat ${SV_CONF}
 sudo systemctl start nginx
 
 # disable php-pfm
-sudo systemctl stop php-fpm
-sudo systemctl disable php-fpm
+if systemctl list-unit-files | grep -q php-fpm.service; then
+  sudo systemctl stop php-fpm
+  sudo systemctl disable php-fpm
+fi
 
 # create tomcat test page
-sudo mkdir /usr/share/tomcat/webapps/ROOT
+sudo mkdir -p /usr/share/tomcat/webapps/ROOT
 sudo tee /usr/share/tomcat/webapps/ROOT/index.html <<EOF
 Hello EC2 tomcat! 
 EOF
 
 # install Let's Encrypt certbot
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
-sudo yum install -y certbot python-certbot-nginx
+sudo amazon-linux-extras install epel -y  # EPELを有効化
+sudo yum install -y certbot python2-certbot-nginx  # Certbotをインストール
 
 # create cron.txt
 CRON_TXT=~/environment/cron.txt
@@ -234,21 +250,19 @@ fi
 # nginx
 which nginx >/dev/null 2>&1
 if [ $? -eq  1 ]; then
-  echo "nginx is not installed!"
+  echo "Nginx is not installed!"
   COMPLETED=0
 fi
-# tomcat
-which tomcat >/dev/null 2>&1
-if [ $? -eq  1 ]; then
-  echo "tomcat is not installed!"
-  COMPLETED=0
-fi
-# Let's Encrypt certbot
+
+# certbot
 which certbot >/dev/null 2>&1
 if [ $? -eq  1 ]; then
-  echo "certbot is not installed!"
+  echo "Certbot is not installed!"
   COMPLETED=0
 fi
-if [ $COMPLETED -eq  1 ]; then
-  echo "java-setup.sh successfully completed."
+
+if [ ${COMPLETED} -eq 1 ]; then
+  echo "All components have been successfully installed!"
+else
+  echo "Some components failed to install. Check the logs."
 fi

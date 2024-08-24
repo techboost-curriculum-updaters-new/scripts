@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# スクリプト開始時刻を記録
+START_TIME=$SECONDS
+
 # キャッシュメモリ を解放
 sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
 
@@ -51,6 +54,10 @@ git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 rbenv install 2.7.3
 rbenv global 2.7.3
 
+# RubyGems の更新
+gem install rubygems-update -v 3.3.22
+update_rubygems
+
 # Rails 5.2.0 のインストール
 gem install nokogiri -v 1.15.6
 gem install rails -v 5.2.0
@@ -94,3 +101,8 @@ source ~/.bashrc
 source ~/.bash_profile
 
 echo "環境構築が完了しました。"
+
+# 経過時間を計算
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+
+echo "実行時間: ${ELAPSED_TIME}秒"
