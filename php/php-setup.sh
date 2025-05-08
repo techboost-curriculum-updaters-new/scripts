@@ -38,32 +38,20 @@ DB_PASSWORD=$(sudo grep "A temporary password is generated" /var/log/mysqld.log 
 # 初期パスワードでMySQLにログインし、パスワードを空文字に変更
 mysql -u root -p${DB_PASSWORD} --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'TB@shibuya1';SET PERSIST validate_password.policy = LOW;SET PERSIST validate_password.mixed_case_count = 0;SET PERSIST validate_password.number_count = 0;SET PERSIST validate_password.special_char_count = 0;SET PERSIST validate_password.length = 0;ALTER USER 'root'@'localhost' IDENTIFIED BY '';";
 
-# rvm をアンインストール
-if command -v rvm &> /dev/null; then
-  rvm seppuku --force
-  source ~/.bash_profile
-fi
+# 既存のPHPを 削除
+sudo yum remove php-cli php-common php-devel php-fpm php-mysqlnd php-pdo php-pear php-process php-xml -y
+sudo rm -rf /etc/php /var/lib/php
 
-# rbenv をインストール
-if ! command -v rbenv &> /dev/null; then
-  git clone https://github.com/sstephenson/rbenv.git .rbenv
-  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-  echo 'export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bash_profile
-  echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-  source ~/.bash_profile
-fi
+# PHP8.2 をインストール
+sudo amazon-linux-extras install php8.2 -y
 
-# ruby2.7 をインストール
-export CONFIGURE_OPTS="--disable-install-doc --disable-install-rdoc"
-rbenv install 2.7.3 -s
-unset CONFIGURE_OPTS
+# PHPパッケージに関連する設定ファイルや関連ファイル をインストール
+sudo yum install php-mbstring php-cli php-common php-devel php-fpm php-mysqlnd php-pdo php-pear php-process php-xml -y
 
-rbenv global 2.7.3
-
-# rails5.2 をインストール
-printf "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri\n" >> ~/.gemrc
-gem install nokogiri -v 1.15.5
-gem install rails -v 5.2.0
+# composer をインストール
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/bin/composer
 
 # .bash_profile を再読み込み
 source $HOME/.bash_profile
+
